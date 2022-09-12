@@ -78,7 +78,7 @@ model.add(tf.keras.layers.Dense(200))
 model.summary()
 
 model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+        optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
         loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
         metrics=["acc"]
         )
@@ -86,9 +86,29 @@ model.compile(
 STEPS_PER_EPOCH = int(len(train_path)//BATCH_SIZE)
 VAL_STEPS_PER_EPOCH = int(len(test_path)/BATCH_SIZE)
 history = model.fit(
-        train_ds,
+        train_ds,epochs=20,
         batch_size=BATCH_SIZE,
         steps_per_epoch=STEPS_PER_EPOCH,
         validation_data=test_ds,
         validation_steps=VAL_STEPS_PER_EPOCH
         )
+
+
+%matplotlib auto
+%matplotlib inline 
+for i in range(32):
+    for img, label in train_ds.take(1):
+        plt.subplot(4, 8, i+1)
+        plt.title(f"{index_to_label.get(label.numpy()[i])}")
+        plt.imshow(img[i].numpy())
+
+for i, k in train_ds.take(1):
+    print(k[0])
+
+
+fig , ax = plt.subplots(2,2)
+ax[0][0].set_title("nihao")
+ax[1][1].plot([2, 2, 3])
+ax[1][1].set_title("quxian ")
+plt.tight_layout()
+
